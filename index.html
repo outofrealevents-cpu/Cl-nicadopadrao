@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clínica do Padrão - O Seu Sorriso, o Nosso Padrão</title>
+    
+    <link rel="icon" href="public/logofinalrony.png" type="image/png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'padrao-blue': '#0b2540',
+                        'padrao-gold': '#bba458',
+                        'padrao-light': '#f7f7f7',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base Styles */
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Carousel Styles */
+        .carousel-item {
+            display: none;
+            transition: opacity 0.7s ease-in-out;
+        }
+        .carousel-item.active {
+            display: block;
+            opacity: 1;
+        }
+        .carousel-item-fade {
+            opacity: 0;
+        }
+
+        /* Modal Styles */
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+        .modal.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal.open .modal-content {
+            transform: scale(1);
+        }
+
+        /* NEW: Cookie Banner Styles */
+        .cookie-banner {
+            background-color: #f7f7f7;
+            border-top: 1px solid #ddd;
+            color: #0b2540;
+            transition: transform 0.3s ease-in-out;
+            transform: translateY(100%);
+        }
+        .cookie-banner.show {
+            transform: translateY(0);
+        }
+        .cookie-revisit {
+            background-color: #0b2540;
+            transition: transform 0.3s ease-in-out, opacity 0.3s;
+            transform: translateY(100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+        .cookie-revisit.show {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800">
+
+    <header id="main-header" class="sticky top-0 z-40 bg-white text-padrao-blue shadow-md">
+        <nav class="p-4">
+            <div class="container mx-auto flex justify-between items-center">
+                <a href="#" class="flex items-center gap-3">
+                    <img src="public/logofinalrony.png" alt="Clínica do Padrão Logo" class="h-12 md:h-16">
+                    <span class="text-xl md:text-2xl font-serif font-bold">Clínica do Padrão</span>
+                </a>
+
+                <button id="mobile-menu-btn" class="lg:hidden text-3xl">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <div class="hidden lg:flex items-center gap-4">
+                    <ul class="flex gap-4">
+                        <li><a href="#apresentacao" class="font-medium hover:text-padrao-gold transition-colors">A Clínica</a></li>
+                        <li><a href="#medicos" class="font-medium hover:text-padrao-gold transition-colors">A Equipa</a></li>
+                        <li><a href="#servicos" class="font-medium hover:text-padrao-gold transition-colors">Serviços</a></li>
+                        <li><a href="#opinioes" class="font-medium hover:text-padrao-gold transition-colors">Opiniões</a></li>
+                        <li><a href="#localizacao" class="font-medium hover:text-padrao-gold transition-colors">Localização</a></li>
+                        <li><a href="#agendamento" class="font-medium hover:text-padrao-gold transition-colors">Marcar</a></li>
+                    </ul>
+                    <div class="flex items-center gap-4 pl-4 border-l border-gray-200">
+                        <a href="https://www.instagram.com/clinicadentariadopadrao/" target="_blank" class="text-xl hover:text-padrao-gold transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.facebook.com/clinicadentariadopadrao/?locale=pt_PT" target="_blank" class="text-xl hover:text-padrao-gold transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#agendamento" class="ml-2 bg-padrao-gold text-padrao-blue font-bold text-sm py-2 px-4 rounded-lg hover:bg-opacity-90 transition-all shadow-sm">
+                            Marcar Consulta
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div id="mobile-menu" class="hidden lg:hidden fixed top-0 left-0 right-0 bottom-0 bg-padrao-blue z-50 p-6 pt-20 text-center">
+            <button id="mobile-menu-close-btn" class="absolute top-6 right-6 text-3xl text-white">
+                <i class="fas fa-times"></i>
+            </button>
+            <ul class="flex flex-col gap-6 text-xl">
+                <li><a href="#apresentacao" class="mobile-link block py-2 text-white font-medium hover:text-padrao-gold transition-colors">A Clínica</a></li>
+                <li><a href="#medicos" class="mobile-link block py-2 text-white font-medium hover:text-padrao-gold transition-colors">A Equipa</a></li>
+                <li><a href="#servicos" class="mobile-link block py-2 text-white font-medium hover:text-padrao-gold transition-colors">Serviços</a></li>
+                <li><a href="#opinioes" class="mobile-link block py-2 text-white font-medium hover:text-padrao-gold transition-colors">Opiniões</a></li>
+                <li><a href="#localizacao" class="mobile-link block py-2 text-white font-medium hover:text-padrao-gold transition-colors">Localização</a></li>
+                <li><a href="#agendamento" class="mobile-link block py-2 text-white font-medium hover:text-padrao-gold transition-colors">Marcar Consulta</a></li>
+            </ul>
+            <div class="flex justify-center gap-6 mt-10 pt-6 border-t border-white/30">
+                <a href="https://www.instagram.com/clinicadentariadopadrao/" target="_blank" class="text-2xl text-white hover:text-padrao-gold transition-colors">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.facebook.com/clinicadentariadopadrao/?locale=pt_PT" target="_blank" class="text-2xl text-white hover:text-padrao-gold transition-colors">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+            </div>
+        </div>
+
+    </header>
+
+    <section id="hero" class="relative h-[60vh] md:h-[70vh] text-white flex items-center justify-center text-center">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('public/IMG_7583.JPG');"></div>
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+        
+        <div class="relative z-10 p-4">
+            <h1 class="text-4xl md:text-6xl font-serif font-bold drop-shadow-md">O Seu Sorriso, o Nosso Padrão</h1>
+            <p class="mt-4 text-lg md:text-xl text-white/90 drop-shadow-md">Excelência em medicina dentária.</p>
+            <a href="#agendamento" class="mt-8 inline-block bg-padrao-gold text-padrao-blue font-bold text-lg py-3 px-8 rounded-lg hover:bg-opacity-90 transition-all shadow-md hover:shadow-lg">
+                Marcar Consulta
+            </a>
+        </div>
+    </section>
+
+    <section id="apresentacao" class="py-16 md:py-24 bg-padrao-light">
+        <div class="container mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
+            <div class="prose max-w-none">
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-padrao-blue mb-6">A Clínica</h2>
+                <p class="text-gray-700">Na Clínica do Padrão, acreditamos que cada sorriso conta uma história — e é com essa dedicação que cuidamos de cada paciente, com um olhar atento, humano e personalizado. Fundada com o compromisso de oferecer cuidados de saúde oral de excelência, a nossa clínica reúne uma equipa de profissionais qualificados, tecnologia de ponta e um ambiente pensado para proporcionar conforto, segurança e bem-estar.</p>
+                <p class="text-gray-700">Aqui, praticamos uma medicina dentária moderna e integrada, focada não apenas na resolução de problemas, mas na prevenção, educação oral e na promoção de uma saúde dentária duradoura.</p>
+                
+                <h4 class="text-xl font-serif font-bold text-padrao-gold mt-6 mb-3">O Que Nos Distingue:</h4>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li>Atendimento centrado no paciente e nas suas necessidades reais</li>
+                    <li>Abordagem multidisciplinar e personalizada</li>
+                    <li>Equipamentos modernos e técnicas atualizadas</li>
+                    <li>Excelência clínica aliada à humanização do cuidado</li>
+                    <li>Serviços complementares como Harmonização Facial e Estética Oral</li>
+                </ul>
+                <p class="mt-6 text-lg italic border-l-4 border-padrao-gold pl-4 text-padrao-blue font-medium">Na Clínica do Padrão, mais do que tratar dentes, cuidamos de pessoas.</p>
+            </div>
+            
+            <div id="clinic-carousel" class="relative w-full max-w-xl mx-auto rounded-lg overflow-hidden shadow-xl">
+                <div class="relative h-96">
+                    <div class="carousel-item active carousel-item-fade">
+                        <img src="public/IMG_7536_edited.jpg" alt="Equipamento de consultório dentário" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-item carousel-item-fade">
+                        <img src="public/IMG_7560_edited.jpg" alt="Detalhe do logótipo da clínica no uniforme" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-item carousel-item-fade">
+                        <img src="public/IMG_7583.JPG" alt="Equipa Clínica do Padrão" class="w-full h-full object-cover">
+                    </div>
+                </div>
+
+                <button class="carousel-prev absolute top-1/2 left-3 -translate-y-1/2 bg-black/40 text-white w-10 h-10 rounded-full hover:bg-black/60 transition-colors z-10">❮</button>
+                <button class="carousel-next absolute top-1/2 right-3 -translate-y-1/2 bg-black/40 text-white w-10 h-10 rounded-full hover:bg-black/60 transition-colors z-10">❯</button>
+
+                <div class="carousel-dots absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                    <button class="carousel-dot w-3 h-3 bg-white/50 rounded-full transition-all"></button>
+                    <button class="carousel-dot w-3 h-3 bg-white/50 rounded-full transition-all"></button>
+                    <button class="carousel-dot w-3 h-3 bg-white/50 rounded-full transition-all"></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="medicos" class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-serif font-bold text-padrao-blue text-center mb-12">A Nossa Equipa</h2> 
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                
+                <div onclick="openModal('veronica')" class="bg-padrao-light rounded-lg shadow-lg overflow-hidden cursor-pointer transition-shadow duration-300 group hover:shadow-xl">
+                    <img src="public/dr.veronica.jpg" alt="Dra. Verónica Castro" class="w-full h-80 object-cover object-top">
+                    <div class="p-6 text-center">
+                        <h3 class="text-2xl font-serif font-bold text-padrao-gold">Dra. Verónica Castro</h3>
+                        <p class="text-gray-700 mt-1">Médica Dentária | Diretora Clínica</p>
+                        <span class="mt-4 block text-padrao-blue font-semibold group-hover:underline">Ver Perfil Completo »</span>
+                    </div>
+                </div>
+
+                <div onclick="openModal('leonardo')" class="bg-padrao-light rounded-lg shadow-lg overflow-hidden cursor-pointer transition-shadow duration-300 group hover:shadow-xl">
+                    <img src="public/dr.leo.png" alt="Dr. Leonardo Serra" class="w-full h-80 object-cover object-top">
+                    <div class="p-6 text-center">
+                        <h3 class="text-2xl font-serif font-bold text-padrao-gold">Dr. Leonardo Serra</h3>
+                        <p class="text-gray-700 mt-1">Especialista em Cirurgia Oral</p>
+                        <span class="mt-4 block text-padrao-blue font-semibold group-hover:underline">Ver Perfil Completo »</span>
+                    </div>
+                </div>
+
+                <div onclick="openModal('filipa')" class="bg-padrao-light rounded-lg shadow-lg overflow-hidden cursor-pointer transition-shadow duration-300 group hover:shadow-xl">
+                    <div class="w-full h-80 bg-gray-200 flex items-center justify-center text-gray-500 font-medium text-lg">
+                        [FOTO DRA. FILIPA]
+                    </div>
+                    <div class="p-6 text-center">
+                        <h3 class="text-2xl font-serif font-bold text-padrao-gold">Dra. Filipa Teles</h3>
+                        <p class="text-gray-700 mt-1">Ortodontista</p>
+                        <span class="mt-4 block text-padrao-blue font-semibold group-hover:underline">Ver Perfil Completo »</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="servicos" class="py-16 md:py-24 bg-padrao-blue">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-serif font-bold text-padrao-gold text-center mb-12">Os Nossos Serviços</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                    <h3 class="text-2xl font-serif font-bold text-padrao-blue mb-3">Medicina Dentária Geral</h3>
+                    <p class="text-gray-700">Diagnóstico, higiene oral, restaurações e check-ups regulares.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                    <h3 class="text-2xl font-serif font-bold text-padrao-blue mb-3">Estética Dentária</h3>
+                    <p class="text-gray-700">Branqueamento, facetas de porcelana e correção de imperfeições no sorriso.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                    <h3 class="text-2xl font-serif font-bold text-padrao-blue mb-3">Cirurgia Oral e Implantologia</h3>
+                    <p class="text-gray-700">Extrações complexas, implantes dentários e regeneração óssea avançada.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                    <h3 class="text-2xl font-serif font-bold text-padrao-blue mb-3">Ortodontia</h3>
+                    <p class="text-gray-700">Alinhadores transparentes (Invisalign) e aparelhos tradicionais para todas as idades.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                    <h3 class="text-2xl font-serif font-bold text-padrao-blue mb-3">Harmonização Facial</h3>
+                    <p class="text-gray-700">Tratamentos com Toxina Botulínica e Ácido Hialurónico para a área orofacial.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                    <h3 class="text-2xl font-serif font-bold text-padrao-blue mb-3">Endodontia</h3>
+                    <p class="text-gray-700">Tratamento de canais para salvar dentes com infeção ou lesão na polpa.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="opinioes" class="py-16 md:py-24 bg-padrao-light">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-serif font-bold text-padrao-blue text-center mb-12">O Que Dizem os Nossos Pacientes</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <div class="bg-white p-6 rounded-lg shadow-md flex flex-col">
+                    <div class="text-yellow-400 text-xl mb-4">
+                        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+                    </div>
+                    <p class="italic text-gray-700 flex-grow">"Fui muito bem recebida desde o primeiro momento. Todo o atendimento foi feito com profissionalismo e simpatia. Senti-me em boas mãos durante toda a consulta. Recomendo vivamente a clínica!"</p>
+                    <div class="mt-6 pt-4 border-t border-gray-200 text-sm">
+                        <strong class="block text-gray-900">Marcio Ventura</strong>
+                        <span class="text-gray-500">Review from Google</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md flex flex-col">
+                    <div class="text-yellow-400 text-xl mb-4">
+                        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+                    </div>
+                    <p class="italic text-gray-700 flex-grow">"Desde a avaliação fui muito bem tratada. Assim como durante o tratamento. Fiquei muito satisfeita!"</p>
+                    <div class="mt-6 pt-4 border-t border-gray-200 text-sm">
+                        <strong class="block text-gray-900">Angela Ferreira</strong>
+                        <span class="text-gray-500">Review from Google</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md flex flex-col">
+                    <div class="text-yellow-400 text-xl mb-4">
+                        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+                    </div>
+                    <p class="italic text-gray-700 flex-grow">"Simplesmente impecável! Saí da clínica com o sorriso renovado. Não só pelos dentes, mas pela experiência como um todo. Recomendo de olhos fechados!"</p>
+                    <div class="mt-6 pt-4 border-t border-gray-200 text-sm">
+                        <strong class="block text-gray-900">Tiago Santos</strong>
+                        <span class="text-gray-500">Review from Google</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="localizacao" class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
+            <div>
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-padrao-blue mb-6">Onde Nos Encontramos</h2>
+                <p class="text-gray-700 mb-6">A Clínica do Padrão está convenientemente localizada em Pedroso, com fácil acesso e estacionamento.</p>
+                <p class="text-lg font-medium text-gray-900 mb-6 flex gap-3">
+                    <i class="fas fa-map-marker-alt text-padrao-gold mt-1"></i>
+                    <span>Rua do Padrão nº58, 2º sala 22, 4415-284 Pedroso</span>
+                </p>
+                <a href="https://www.google.com/maps/place//data=!4m2!3m1!1s0xd247b52f9b86f85:0x2fd4a31b986a5ed6?sa=X&ved=1t:8290&ictx=111" target="_blank" class="inline-block bg-padrao-blue text-white px-6 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors">
+                    Ver no Google Maps
+                </a>
+            </div>
+            <div class="w-full h-96 md:h-full min-h-[300px] rounded-lg shadow-xl overflow-hidden">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3007.489110757785!2d-8.561334623776472!3d41.0805179155091!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd247b52f9b86f85%3A0x2fd4a31b986a5ed6!2sCl%C3%ADnica%20Dent%C3%A1ria%20do%20Padr%C3%A3o!5e0!3m2!1sen!2spt!4v1730424560731!5m2!1sen!2spt" 
+                    width="100%" 
+                    height="100%" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <section id="agendamento" class="py-16 md:py-24 bg-padrao-blue">
+        <div class="container mx-auto px-4 max-w-3xl text-center">
+            <h2 class="text-3xl md:text-4xl font-serif font-bold text-padrao-gold mb-4">Marque a Sua Consulta</h2>
+            <p class="text-white/90 mb-8 max-w-2xl mx-auto">Selecione o médico, a data e o horário desejados. O seu pedido será enviado para a clínica para confirmação.</p>
+            
+            <form action="mailto:clinicadentariadopadrao@hotmail.com" method="POST" enctype="text/plain" class="bg-white p-6 md:p-8 rounded-lg shadow-2xl text-left">
+                <div class="grid md:grid-cols-2 gap-6">
+                    
+                    <div class="md:col-span-2">
+                        <label for="medico" class="block text-sm font-medium text-gray-700 mb-1">Escolha o Médico:</label>
+                        <select id="medico" name="medico" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-padrao-gold focus:border-padrao-gold">
+                            <option value="">-- Selecione um Especialista --</option>
+                            <option value="veronica_castro">Dra. Verónica Castro</option>
+                            <option value="leonardo_serra">Dr. Leonardo Serra</option>
+                            <option value="filipa_teles">Dra. Filipa Teles</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="data" class="block text-sm font-medium text-gray-700 mb-1">Data Desejada:</label>
+                        <input type="date" id="data" name="data" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-padrao-gold focus:border-padrao-gold">
+                    </div>
+                    
+                    <div>
+                        <label for="hora" class="block text-sm font-medium text-gray-700 mb-1">Hora Desejada:</label>
+                        <input type="time" id="hora" name="hora" min="09:00" max="18:00" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-padrao-gold focus:border-padrao-gold">
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label for="nome" class="block text-sm font-medium text-gray-700 mb-1">Nome Completo:</label>
+                        <input type="text" id="nome" name="nome" placeholder="O seu nome" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-padrao-gold focus:border-padrao-gold">
+                    </div>
+                    
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">E-mail:</label>
+                        <input type="email" id="email" name="email" placeholder="o_seu_email@exemplo.com" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-padrao-gold focus:border-padrao-gold">
+                    </div>
+                    
+                    <div>
+                        <label for="telefone" class="block text-sm font-medium text-gray-700 mb-1">Telefone:</label>
+                        <input type="tel" id="telefone" name="telefone" placeholder="(+351) XXXXXXXXX" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-padrao-gold focus:border-padrao-gold">
+                    </div>
+                    
+                    <button type="submit" class="md:col-span-2 w-full bg-padrao-gold text-padrao-blue font-bold text-lg py-3 rounded-lg hover:bg-opacity-90 transition-all shadow-md hover:shadow-lg">
+                        Enviar Pedido de Marcação
+                    </button>
+                    
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <footer class="py-16 bg-padrao-blue text-gray-300">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-12">
+                
+                <div class="md:col-span-2">
+                    <img src="public/logofinalrony.png" alt="Logo Clínica do Padrão" class="h-16 mb-4 bg-white/10 rounded-md p-2">
+                    <p class="text-sm text-gray-400 max-w-md">O Grupo Clínica do Padrão surge em 2024 com o conceito de serviço acessível a toda a comunidade, garantindo padrões de altíssima qualidade e eficiência.</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Links Rápidos</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#apresentacao" class="hover:text-padrao-gold transition-colors">A Clínica</a></li>
+                        <li><a href="#medicos" class="hover:text-padrao-gold transition-colors">A Equipa</a></li>
+                        <li><a href="#servicos" class="hover:text-padrao-gold transition-colors">Serviços</a></li>
+                        <li><a href="#localizacao" class="hover:text-padrao-gold transition-colors">Localização</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Contacto</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex gap-2 items-start">
+                            <i class="fas fa-map-marker-alt text-padrao-gold mt-1"></i>
+                            <span class="text-gray-400">Rua do Padrão nº58, 2º sala 22, 4415-284 Pedroso</span>
+                        </li>
+                         <li class="flex gap-2 items-center">
+                            <i class="fas fa-phone text-padrao-gold"></i>
+                            <a href="tel:91813007" class="hover:text-padrao-gold transition-colors">918 130 07</a>
+                        </li>
+                         <li class="flex gap-2 items-center">
+                            <i class="fas fa-envelope text-padrao-gold"></i>
+                            <a href="mailto:clinicadentariadopadrao@hotmail.com" class="hover:text-padrao-gold transition-colors text-xs">clinicadentariadopadrao@hotmail.com</a>
+                        </li>
+                        <li class="flex gap-4 mt-4">
+                            <a href="https://www.instagram.com/clinicadentariadopadrao/" target="_blank" class="text-2xl hover:text-padrao-gold transition-colors">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="https://www.facebook.com/clinicadentariadopadrao/?locale=pt_PT" target="_blank" class="text-2xl hover:text-padrao-gold transition-colors">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-white/10 text-center text-xs text-gray-500">
+                <p>© 2024 Clínica do Padrão. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <button id="cookie-revisit-btn" class="cookie-revisit fixed bottom-4 left-4 z-50 w-12 h-12 rounded-full shadow-lg flex items-center justify-center text-white text-2xl">
+        <i class="fas fa-cookie-bite"></i>
+    </button>
+
+    <div id="cookie-banner" class="cookie-banner fixed bottom-0 left-0 right-0 z-50 p-6 shadow-2xl">
+        <div class="container mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="text-center md:text-left">
+                <h4 class="text-lg font-bold text-padrao-blue mb-1">Valorizamos a sua privacidade</h4>
+                <p class="text-sm">Utilizamos cookies para melhorar a sua experiência de navegação e analisar o nosso tráfego. Ao clicar em "Aceitar Todos", concorda com a utilização de cookies.</p>
+            </div>
+            <div class="flex-shrink-0 flex items-center gap-3">
+                <button id="cookie-reject" class="text-sm font-medium text-padrao-blue px-5 py-2 rounded-lg hover:bg-gray-200 transition-colors">Rejeitar</button>
+                <button id="cookie-accept" class="bg-padrao-gold text-padrao-blue text-sm font-bold px-5 py-2 rounded-lg hover:bg-opacity-90 transition-colors">Aceitar Todos</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-veronica" class="modal fixed inset-0 bg-black/70 z-50 hidden flex-col items-center justify-center p-4 opacity-0 pointer-events-none">
+        <div class="modal-content bg-white rounded-lg shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto relative scale-95">
+            <span onclick="closeModal('veronica')" class="absolute top-4 right-4 text-3xl text-gray-500 hover:text-padrao-gold cursor-pointer z-10">×</span>
+            <div class="p-6 text-center border-b">
+                <img src="public/dr.veronica.jpg" alt="Dra. Verónica Castro" class="w-48 h-64 object-cover object-top mx-auto rounded-md mb-4 shadow-md">
+                <h3 class="text-3xl font-serif font-bold text-padrao-gold">Dra. Verónica Castro</h3>
+                <p class="text-gray-700 mt-1 font-medium">Médica Dentária | Especialista em Harmonização Facial | Diretora Clínica</p>
+            </div>
+            <div class="p-6 md:p-8 prose max-w-none">
+                <h4>Formação Académica:</h4>
+                <ul>
+                    <li>Licenciatura em Medicina Dentária pela Faculdade de Medicina Dentária da Universidade do Porto (2019).</li>
+                    <li>Pós-graduação em Dentisteria Adesiva pelo Instituto Universitário de Ciências da Saúde (2021).</li>
+                    <li>Curso Essencial de Endodontia pela EndoAcademy (2020).</li>
+                    <li>Formação Básica em Toxina Botulínica e Ácido Hialurónico pela Make a Smile (2022).</li>
+                    <li>Curso Avançado de Harmonização Orofacial pela IRON Education (2023).</li>
+                </ul>
+                <h4>Experiência Profissional:</h4>
+                <ul>
+                    <li>Diretora Clínica da Clínica do Padrão desde 2024.</li>
+                    <li>Médica Dentária com experiência em clínicas e hospitais privados.</li>
+                    <li>Participação em missão humanitária de voluntariado em Cabo Verde, com prestação de cuidados médicos dentários.</li>
+                </ul>
+                <h4>Áreas de Interesse:</h4>
+                <ul>
+                    <li>Endodontia</li>
+                    <li>Restauração estética</li>
+                    <li>Prótese fixa</li>
+                    <li>Harmonização facial</li>
+                </ul>
+                <h4>Mensagem Pessoal:</h4>
+                <blockquote class="border-l-4 border-padrao-gold pl-4 italic bg-gray-50">"Vejo o paciente como um todo, com todas as suas necessidades e particularidades. Acredito que o tratamento dentário vai muito além de resolver um problema imediato, é sobre promover saúde e bem-estar duradouros. O meu objetivo é criar um ambiente de confiança e empatia, onde cada pessoa se sinta ouvida e compreendida. Ao integrar a estética e a funcionalidade, trabalho para que cada sorriso seja não só bonito, mas também saudável e equilibrado. O compromisso é com o cuidado integral e personalizado, garantindo que cada paciente receba o melhor atendimento, adaptado às suas necessidades e ao seu estilo de vida."</blockquote>
+            </div>
+            </div>
+    </div>
+
+    <div id="modal-leonardo" class="modal fixed inset-0 bg-black/70 z-50 hidden flex-col items-center justify-center p-4 opacity-0 pointer-events-none">
+        <div class="modal-content bg-white rounded-lg shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto relative scale-95">
+            <span onclick="closeModal('leonardo')" class="absolute top-4 right-4 text-3xl text-gray-500 hover:text-padrao-gold cursor-pointer z-10">×</span>
+            <div class="p-6 text-center border-b">
+                <img src="public/dr.leo.png" alt="Dr. Leonardo Serra" class="w-48 h-64 object-cover object-top mx-auto rounded-md mb-4 shadow-md">
+                <h3 class="text-3xl font-serif font-bold text-padrao-gold">Dr. Leonardo Serra</h3>
+                <p class="text-gray-700 mt-1 font-medium">Especialista em Cirurgia Oral e Reabilitação Oral</p>
+            </div>
+            <div class="p-6 md:p-8 prose max-w-none">
+                <h4>Formação Académica:</h4>
+                <ul>
+                    <li>Licenciatura em Medicina Dentária – Faculdade de Medicina Dentária da Universidade Fernando Pessoa (2014)</li>
+                    <li>
+                        Curso de Prótese Fixa e Oclusão – Centro Europeu de Pós Graduação, Porto
+                        <p class="!mt-1 !text-sm !text-gray-600">Competências: prótese fixa, oclusão, reabilitação oral e estética.</p>
+                    </li>
+                    <li>
+                        Curso de Cirurgia Oral Diferenciada – Hospital Universitário de Santa Clara, Cuba
+                        <p class="!mt-1 !text-sm !text-gray-600">Competências: extrações múltiplas, dentes inclusos, remoção de cistos e regularizações ósseas.</p>
+                    </li>
+                    <li>
+                        Taller de Planificación y Diseño Digital del Sector Anterior – Sevilha, Espanha
+                        <p class="!mt-1 !text-sm !text-gray-600">Competências: Digital Smile Design (DSD).</p>
+                    </li>
+                    <li>
+                        Curso de Estética Dentária – Shape Dentistry Academy, Caldas das Taipas
+                        <p class="!mt-1 !text-sm !text-gray-600">Competências: facetas, overlays e estética dentária.</p>
+                    </li>
+                    <li>
+                        Flashooting in Dentistry – Shape Dentistry Academy, Caldas das Taipas
+                        <p class="!mt-1 !text-sm !text-gray-600">Competências: fotografia dentária.</p>
+                    </li>
+                    <li>
+                        Curso de Implantologia – Núcleo CIRO, Porto
+                        <p class="!mt-1 !text-sm !text-gray-600">Competências: prática cirúrgica e protética em implantologia.</p>
+                    </li>
+                    <li>
+                        Residência em Cirurgia Oral (MASTER) – Foramen Dental Education, Porto
+                        <p class="!mt-1 !text-sm !text-gray-600">Competências: implantologia, regeneração óssea (Khoury, PTFE, elevação de seio), modelação de tecidos e reabilitação oral.</p>
+                    </li>
+                    <li>
+                        Facial Harmonization Course – Lusobionic Academy, Barcelos
+                        <p class="!mt-1 !text-sm !text-gray-600">Competências: injeção de toxina botulínica e ácido hialurónico.</p>
+                    </li>
+                    <li>
+                        Curso de FP1 – Foramen Dental Education, Porto
+                        <p class="!mt-1 !text-sm !text-gray-600">Competências: fundamentos e práticas clínicas em implantologia e reabilitação oral.</p>
+                    </li>
+                </ul>
+                
+                <h4>Mensagem Pessoal:</h4>
+                <blockquote class="border-l-4 border-padrao-gold pl-4 italic bg-gray-50">"Apaixonado pela cirurgia oral, dedico-me à resolução de casos complexos, com especial enfoque em regenerações ósseas, cirurgias avançadas e reabilitações orais completas. A minha prática clínica centra-se na busca constante por soluções personalizadas, utilizando técnicas modernas e previsíveis que permitem restaurar função, estética e confiança aos pacientes. Combinando planeamento rigoroso, precisão técnica e uma abordagem multidisciplinar, procuro transformar situações clínicas desafiantes em resultados sustentáveis e naturais. O meu objetivo é oferecer tratamentos de excelência, mesmo em casos considerados 'sem solução', devolvendo não apenas o sorriso, mas também a qualidade de vida de cada paciente."</blockquote>
+            </div>
+            </div>
+    </div>
+
+    <div id="modal-filipa" class="modal fixed inset-0 bg-black/70 z-50 hidden flex-col items-center justify-center p-4 opacity-0 pointer-events-none">
+        <div class="modal-content bg-white rounded-lg shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto relative scale-95">
+            <span onclick="closeModal('filipa')" class="absolute top-4 right-4 text-3xl text-gray-500 hover:text-padrao-gold cursor-pointer z-10">×</span>
+            <div class="p-6 text-center border-b">
+                <div class="w-48 h-64 bg-gray-200 flex items-center justify-center text-gray-500 font-medium mx-auto rounded-md mb-4 shadow-md">[FOTO DRA. FILIPA]</div>
+                <h3 class="text-3xl font-serif font-bold text-padrao-gold">Dra. Filipa Teles</h3>
+                <p class="text-gray-700 mt-1 font-medium">Ortodontista</p>
+            </div>
+            <div class="p-6 md:p-8 prose max-w-none">
+                <h4>Formação Académica:</h4>
+                <ul>
+                    <li>Mestrado Integrado em Medicina Dentária na Faculdade de Medicina de Coimbra (FMUC)</li>
+                    <li>Pós-graduação em Dentisteria Operatória e Estética na Faculdade de Medicina de Coimbra (FMUC)</li>
+                    <li>Mestrado em Cirurgia Ortognática e Ortodontia pela Universidade de Medicina do Porto (FMUP)</li>
+                    <li>Curso Internacional de Experto en Cirurgia Ortognática y Ortodoncia Quirúrgica pela Universidade Internacional da Catalunha (UIC)</li>
+                </ul>
+                <h4>Formação Complementar e Avançada:</h4>
+                <ul>
+                    <li>Curso teórico de "Microtornillos em Ortodoncia" com Dr Nacho Faus, 2019</li>
+                    <li>Curso "Do MARPE ao DS xpander, a nova referência em dispositivos BAME!" O novo paradigma do tratamento ortodôntico em adultos jovens com endognatia maxilar" com Dr Armando Dias da Silva, 2022</li>
+                    <li>Ortodontia e Ortopedia Funcional dos Maxilares com Adriana Ramos, Lincoln Leonel Ramos, Armando Mendonça, Edimilson Ramos, no centro de formação Sorriso Natural.</li>
+                    <li>Médica Dentária com prática exclusiva em Ortodontia</li>
+                    <li>Participação em vários congressos científicos nacionais e internacionais com posters e comunicações orais.</li>
+                </ul>
+                <h4>Áreas de Interesse:</h4>
+                <ul>
+                    <li>Ortodontia</li>
+                </ul>
+                <h4>Mensagem Pessoal:</h4>
+                <blockquote class="border-l-4 border-padrao-gold pl-4 italic bg-gray-50">"Na ortodontia, acredito que cada sorriso deve refletir equilíbrio e autenticidade. Mais do que corrigir posições dentárias, procuro harmonizar a estética com a função, de forma natural e personalizada. Cada tratamento é pensado para acompanhar a vida do paciente, respeitando a sua individualidade e criando resultados que trazem confiança e bem-estar."</blockquote>
+            </div>
+            </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- Mobile Menu ---
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const closeMenuBtn = document.getElementById('mobile-menu-close-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            const openMenu = () => {
+                mobileMenu.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            };
+            
+            const closeMenu = () => {
+                mobileMenu.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            };
+
+            menuBtn.addEventListener('click', openMenu);
+            closeMenuBtn.addEventListener('click', closeMenu);
+            mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+            
+            // --- Modals (Global Functions) ---
+            // Make functions available globally for inline `onclick`
+            window.openModal = function(medicoId) {
+                const modal = document.getElementById('modal-' + medicoId); // Correção: 'modal-' + medicoId
+                if (modal) {
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                    // Trigger reflow to enable transition
+                    void modal.offsetWidth;
+                    modal.classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+
+            window.closeModal = function(medicoId) {
+                const modal = document.getElementById('modal-' + medicoId);
+                if (modal) {
+                    modal.classList.remove('open');
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                        modal.classList.remove('flex');
+                        // Check if any other modal is open before re-enabling scroll
+                        const anyModalOpen = document.querySelector('.modal.open');
+                        if (!anyModalOpen) {
+                            document.body.style.overflow = 'auto';
+                        }
+                    }, 300); // Match transition duration
+                }
+            }
+
+            // Close modal on outside click
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                modal.addEventListener('click', function(event) {
+                    if (event.target === modal) {
+                        const modalId = modal.id.split('-')[1];
+                        closeModal(modalId);
+                    }
+                });
+            });
+
+            
+            // --- Carousel ---
+            const carousel = document.getElementById('clinic-carousel');
+            if (carousel) {
+                const slides = carousel.querySelectorAll('.carousel-item');
+                const dots = carousel.querySelectorAll('.carousel-dot');
+                const prevBtn = carousel.querySelector('.carousel-prev');
+                const nextBtn = carousel.querySelector('.carousel-next');
+                
+                let currentSlide = 0;
+                let autoPlayInterval;
+
+                function showSlide(index) {
+                    // Normalize index
+                    if (index >= slides.length) {
+                        index = 0;
+                    } else if (index < 0) {
+                        index = slides.length - 1;
+                    }
+
+                    // Hide all slides
+                    slides.forEach((slide, i) => {
+                        slide.classList.remove('active', 'carousel-item-fade');
+                        if (i === currentSlide) {
+                             // Add fade-out effect to the current slide
+                            slide.classList.add('carousel-item-fade');
+                        }
+                    });
+
+                    // Update dots
+                    dots.forEach(dot => dot.classList.remove('bg-white'));
+                    dots.forEach(dot => dot.classList.add('bg-white/50'));
+                    
+                    // Show new slide
+                    currentSlide = index;
+                    slides[currentSlide].classList.add('active');
+                    dots[currentSlide].classList.remove('bg-white/50');
+                    dots[currentSlide].classList.add('bg-white');
+                }
+
+                function nextSlide() {
+                    showSlide(currentSlide + 1);
+                }
+
+                function prevSlide() {
+                    showSlide(currentSlide - 1);
+                }
+
+                function startAutoPlay() {
+                    stopAutoPlay(); // Clear existing interval
+                    autoPlayInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
+                }
+
+                function stopAutoPlay() {
+                    clearInterval(autoPlayInterval);
+                }
+
+                // Event Listeners
+                nextBtn.addEventListener('click', () => {
+                    nextSlide();
+                    stopAutoPlay();
+                    startAutoPlay();
+                });
+
+                prevBtn.addEventListener('click', () => {
+                    prevSlide();
+                    stopAutoPlay();
+                    startAutoPlay();
+                });
+
+                dots.forEach((dot, index) => {
+                    dot.addEventListener('click', () => {
+                        showSlide(index);
+                        stopAutoPlay();
+                        startAutoPlay();
+                    });
+                });
+
+                // Initial setup
+                showSlide(0);
+                startAutoPlay();
+            }
+
+            // --- NEW: Cookie Banner Logic ---
+            const cookieBanner = document.getElementById('cookie-banner');
+            const revisitBtn = document.getElementById('cookie-revisit-btn');
+            const acceptBtn = document.getElementById('cookie-accept');
+            const rejectBtn = document.getElementById('cookie-reject');
+            const consentKey = 'clinica_padrao_consent';
+
+            function showBanner() {
+                cookieBanner.classList.add('show');
+                revisitBtn.classList.remove('show');
+            }
+
+            function hideBanner() {
+                cookieBanner.classList.remove('show');
+                revisitBtn.classList.add('show');
+            }
+
+            function setConsent(value) {
+                localStorage.setItem(consentKey, value);
+                hideBanner();
+            }
+
+            acceptBtn.addEventListener('click', () => setConsent('accepted'));
+            rejectBtn.addEventListener('click', () => setConsent('rejected'));
+            revisitBtn.addEventListener('click', () => {
+                // Clear consent to show banner again
+                localStorage.removeItem(consentKey);
+                showBanner();
+            });
+
+            // Check consent on page load
+            const currentConsent = localStorage.getItem(consentKey);
+            if (!currentConsent) {
+                // Delay banner show slightly to avoid layout shift
+                setTimeout(showBanner, 500);
+            } else {
+                hideBanner();
+            }
+
+        });
+    </script>
+
+</body>
+</html>
