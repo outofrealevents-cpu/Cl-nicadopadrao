@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clínica do Padrão - O Seu Sorriso, o Nosso Padrão</title>
+    
+    <link rel="icon" href="public/logofinalrony.png" type="image/png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'padrao-blue': '#0b2540',
+                        'padrao-gold': '#bba458',
+                        'padrao-light': '#f7f7f7',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base Styles */
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Carousel Styles */
+        .carousel-item {
+            display: none;
+            transition: opacity 0.7s ease-in-out;
+        }
+        .carousel-item.active {
+            display: block;
+            opacity: 1;
+        }
+        .carousel-item-fade {
+            opacity: 0;
+        }
+
+        /* Modal Styles */
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+        .modal.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal.open .modal-content {
+            transform: scale(1);
+        }
+
+        /* NEW: Cookie Banner Styles */
+        .cookie-banner {
+            background-color: #f7f7f7;
+            border-top: 1px solid #ddd;
+            color: #0b2540;
+            transition: transform 0.3s ease-in-out;
+            transform: translateY(100%);
+        }
+        .cookie-banner.show {
+            transform: translateY(0);
+        }
+        .cookie-revisit {
+            background-color: #0b2540;
+            transition: transform 0.3s ease-in-out, opacity 0.3s;
+            transform: translateY(100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+        .cookie-revisit.show {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800">
+
+    <header id="main-header" class="sticky top-0 z-40 bg-white text-padrao-blue shadow-md">
+        <nav class="p-4">
+            <div class="container mx-auto flex justify-between items-center">
+                <a href="index.html" class="flex items-center gap-3">
+                    <img src="public/logofinalrony.png" alt="Clínica do Padrão Logo" class="h-12 md:h-16">
+                    <span class="text-xl md:text-2xl font-serif font-bold">Clínica do Padrão</span>
+                </a>
+
+                <button id="mobile-menu-btn" class="lg:hidden text-3xl">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <div class="hidden lg:flex items-center gap-4">
+                    <ul class="flex gap-4">
+                        <li><a href="index.html#apresentacao" class="font-medium hover:text-padrao-gold transition-colors">A Clínica</a></li>
+                        <li><a href="equipa.html" class="font-medium hover:text-padrao-gold transition-colors">A Equipa</a></li>
+                        <li><a href="servicos.html" class="font-medium hover:text-padrao-gold transition-colors">Serviços</a></li>
+                        <li><a href="opinioes.html" class="font-medium hover:text-padrao-gold transition-colors">Opiniões</a></li>
+                        <li><a href="localizacao.html" class="font-medium hover:text-padrao-gold transition-colors">Localização</a></li>
+                        <li><a href="marcar.html" class="font-medium hover:text-padrao-gold transition-colors">Marcar</a></li>
+                    </ul>
+                    <div class="flex items-center gap-4 pl-4 border-l border-gray-200">
+                        <a href="https://www.instagram.com/clinicadentariadopadrao/" target="_blank" class="text-xl hover:text-padrao-gold transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.facebook.com/clinicadentariadopadrao/?locale=pt_PT" target="_blank" class="text-xl hover:text-padrao-gold transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="marcar.html" class="ml-2 bg-padrao-gold text-padrao-blue font-bold text-sm py-2 px-4 rounded-lg hover:bg-opacity-90 transition-all shadow-sm">
+                            Marcar Consulta
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div id="mobile-menu" class="hidden lg:hidden fixed top-0 left-0 right-0 bottom-0 bg-padrao-blue z-50 p-6 pt-20 text-center">
+            <button id="mobile-menu-close-btn" class="absolute top-6 right-6 text-3xl text-white">
+                <i class="fas fa-times"></i>
+            </button>
+            <ul class="flex flex-col gap-6 text-xl">
+                <li><a href="index.html#apresentacao" class="mobile-link block py-2 text-white font-medium hover:text-padrao-gold transition-colors">A Clínica</a></li>
+                <li><a href="equipa.html" class="mobile-link block py-2 text-white font-medium hover:text-padrao-gold transition-colors">A Equipa</a></li>
+                <li><a href="servicos.html" class="mobile-link block py-2 text-white font-medium hover:text-padrao-gold transition-colors">Serviços</a></li>
+                <li><a href="opinioes.html" class="mobile-link block py-2 text-white font-medium hover:text-padrao-gold transition-colors">Opiniões</a></li>
+                <li><a href="localizacao.html" class="mobile-link block py-2 text-white font-medium hover:text-padrao-gold transition-colors">Localização</a></li>
+                <li><a href="marcar.html" class="mobile-link block py-2 text-white font-medium hover:text-padrao-gold transition-colors">Marcar Consulta</a></li>
+            </ul>
+            <div class="flex justify-center gap-6 mt-10 pt-6 border-t border-white/30">
+                <a href="https://www.instagram.com/clinicadentariadopadrao/" target="_blank" class="text-2xl text-white hover:text-padrao-gold transition-colors">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.facebook.com/clinicadentariadopadrao/?locale=pt_PT" target="_blank" class="text-2xl text-white hover:text-padrao-gold transition-colors">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+            </div>
+        </div>
+
+    </header>
+
+    <section id="hero" class="relative h-[60vh] md:h-[70vh] text-white flex items-center justify-center text-center">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('public/IMG_7583.JPG');"></div>
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+        
+        <div class="relative z-10 p-4">
+            <h1 class="text-4xl md:text-6xl font-serif font-bold drop-shadow-md">O Seu Sorriso, o Nosso Padrão</h1>
+            <p class="mt-4 text-lg md:text-xl text-white/90 drop-shadow-md">Excelência em medicina dentária.</p>
+            <a href="marcar.html" class="mt-8 inline-block bg-padrao-gold text-padrao-blue font-bold text-lg py-3 px-8 rounded-lg hover:bg-opacity-90 transition-all shadow-md hover:shadow-lg">
+                Marcar Consulta
+            </a>
+        </div>
+    </section>
+
+    <section id="apresentacao" class="py-16 md:py-24 bg-padrao-light">
+        <div class="container mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
+            <div class="prose max-w-none">
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-padrao-blue mb-6">A Clínica</h2>
+                <p class="text-gray-700">Na Clínica do Padrão, acreditamos que cada sorriso conta uma história — e é com essa dedicação que cuidamos de cada paciente, com um olhar atento, humano e personalizado. Fundada com o compromisso de oferecer cuidados de saúde oral de excelência, a nossa clínica reúne uma equipa de profissionais qualificados, tecnologia de ponta e um ambiente pensado para proporcionar conforto, segurança e bem-estar.</p>
+                <p class="text-gray-700">Aqui, praticamos uma medicina dentária moderna e integrada, focada não apenas na resolução de problemas, mas na prevenção, educação oral e na promoção de uma saúde dentária duradoura.</p>
+                
+                <h4 class="text-xl font-serif font-bold text-padrao-gold mt-6 mb-3">O Que Nos Distingue:</h4>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li>Atendimento centrado no paciente e nas suas necessidades reais</li>
+                    <li>Abordagem multidisciplinar e personalizada</li>
+                    <li>Equipamentos modernos e técnicas atualizadas</li>
+                    <li>Excelência clínica aliada à humanização do cuidado</li>
+                    <li>Serviços complementares como Harmonização Facial e Estética Oral</li>
+                </ul>
+                <p class="mt-6 text-lg italic border-l-4 border-padrao-gold pl-4 text-padrao-blue font-medium">Na Clínica do Padrão, mais do que tratar dentes, cuidamos de pessoas.</p>
+            </div>
+            
+            <div id="clinic-carousel" class="relative w-full max-w-xl mx-auto rounded-lg overflow-hidden shadow-xl">
+                <div class="relative h-96">
+                    <div class="carousel-item active carousel-item-fade">
+                        <img src="public/IMG_7536_edited.jpg" alt="Equipamento de consultório dentário" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-item carousel-item-fade">
+                        <img src="public/IMG_7560_edited.jpg" alt="Detalhe do logótipo da clínica no uniforme" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-item carousel-item-fade">
+                        <img src="public/IMG_7583.JPG" alt="Equipa Clínica do Padrão" class="w-full h-full object-cover">
+                    </div>
+                </div>
+
+                <button class="carousel-prev absolute top-1/2 left-3 -translate-y-1/2 bg-black/40 text-white w-10 h-10 rounded-full hover:bg-black/60 transition-colors z-10">❮</button>
+                <button class="carousel-next absolute top-1/2 right-3 -translate-y-1/2 bg-black/40 text-white w-10 h-10 rounded-full hover:bg-black/60 transition-colors z-10">❯</button>
+
+                <div class="carousel-dots absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                    <button class="carousel-dot w-3 h-3 bg-white/50 rounded-full transition-all"></button>
+                    <button class="carousel-dot w-3 h-3 bg-white/50 rounded-full transition-all"></button>
+                    <button class="carousel-dot w-3 h-3 bg-white/50 rounded-full transition-all"></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-16 bg-padrao-blue text-gray-300">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-12">
+                
+                <div class="md:col-span-2">
+                    <img src="public/logofinalrony.png" alt="Logo Clínica do Padrão" class="h-16 mb-4 bg-white/10 rounded-md p-2">
+                    <p class="text-sm text-gray-400 max-w-md">O Grupo Clínica do Padrão surge em 2024 com o conceito de serviço acessível a toda a comunidade, garantindo padrões de altíssima qualidade e eficiência.</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Links Rápidos</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html#apresentacao" class="hover:text-padrao-gold transition-colors">A Clínica</a></li>
+                        <li><a href="equipa.html" class="hover:text-padrao-gold transition-colors">A Equipa</a></li>
+                        <li><a href="servicos.html" class="hover:text-padrao-gold transition-colors">Serviços</a></li>
+                        <li><a href="localizacao.html" class="hover:text-padrao-gold transition-colors">Localização</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Contacto</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex gap-2 items-start">
+                            <i class="fas fa-map-marker-alt text-padrao-gold mt-1"></i>
+                            <span class="text-gray-400">Rua do Padrão nº58, 2º sala 22, 4415-284 Pedroso</span>
+                        </li>
+                         <li class="flex gap-2 items-center">
+                            <i class="fas fa-phone text-padrao-gold"></i>
+                            <a href="tel:91813007" class="hover:text-padrao-gold transition-colors">918 130 07</a>
+                        </li>
+                         <li class="flex gap-2 items-center">
+                            <i class="fas fa-envelope text-padrao-gold"></i>
+                            <a href="mailto:clinicadentariadopadrao@hotmail.com" class="hover:text-padrao-gold transition-colors text-xs">clinicadentariadopadrao@hotmail.com</a>
+                        </li>
+                        <li class="flex gap-4 mt-4">
+                            <a href="https://www.instagram.com/clinicadentariadopadrao/" target="_blank" class="text-2xl hover:text-padrao-gold transition-colors">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="https://www.facebook.com/clinicadentariadopadrao/?locale=pt_PT" target="_blank" class="text-2xl hover:text-padrao-gold transition-colors">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-white/10 text-center text-xs text-gray-500">
+                <p>© 2024 Clínica do Padrão. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <button id="cookie-revisit-btn" class="cookie-revisit fixed bottom-4 left-4 z-50 w-12 h-12 rounded-full shadow-lg flex items-center justify-center text-white text-2xl">
+        <i class="fas fa-cookie-bite"></i>
+    </button>
+
+    <div id="cookie-banner" class="cookie-banner fixed bottom-0 left-0 right-0 z-50 p-6 shadow-2xl">
+        <div class="container mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="text-center md:text-left">
+                <h4 class="text-lg font-bold text-padrao-blue mb-1">Valorizamos a sua privacidade</h4>
+                <p class="text-sm">Utilizamos cookies para melhorar a sua experiência de navegação e analisar o nosso tráfego. Ao clicar em "Aceitar Todos", concorda com a utilização de cookies.</p>
+            </div>
+            <div class="flex-shrink-0 flex items-center gap-3">
+                <button id="cookie-reject" class="text-sm font-medium text-padrao-blue px-5 py-2 rounded-lg hover:bg-gray-200 transition-colors">Rejeitar</button>
+                <button id="cookie-accept" class="bg-padrao-gold text-padrao-blue text-sm font-bold px-5 py-2 rounded-lg hover:bg-opacity-90 transition-colors">Aceitar Todos</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- Mobile Menu ---
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const closeMenuBtn = document.getElementById('mobile-menu-close-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            const openMenu = () => {
+                mobileMenu.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            };
+            
+            const closeMenu = () => {
+                mobileMenu.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            };
+
+            menuBtn.addEventListener('click', openMenu);
+            closeMenuBtn.addEventListener('click', closeMenu);
+            mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+            
+            // --- Modals (Global Functions) ---
+            // Make functions available globally for inline `onclick`
+            window.openModal = function(medicoId) {
+                const modal = document.getElementById('modal-' + medicoId); // Correção: 'modal-' + medicoId
+                if (modal) {
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                    // Trigger reflow to enable transition
+                    void modal.offsetWidth;
+                    modal.classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+
+            window.closeModal = function(medicoId) {
+                const modal = document.getElementById('modal-' + medicoId);
+                if (modal) {
+                    modal.classList.remove('open');
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                        modal.classList.remove('flex');
+                        // Check if any other modal is open before re-enabling scroll
+                        const anyModalOpen = document.querySelector('.modal.open');
+                        if (!anyModalOpen) {
+                            document.body.style.overflow = 'auto';
+                        }
+                    }, 300); // Match transition duration
+                }
+            }
+
+            // Close modal on outside click
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                modal.addEventListener('click', function(event) {
+                    if (event.target === modal) {
+                        const modalId = modal.id.split('-')[1];
+                        closeModal(modalId);
+                    }
+                });
+            });
+
+            
+            // --- Carousel ---
+            const carousel = document.getElementById('clinic-carousel');
+            if (carousel) {
+                const slides = carousel.querySelectorAll('.carousel-item');
+                const dots = carousel.querySelectorAll('.carousel-dot');
+                const prevBtn = carousel.querySelector('.carousel-prev');
+                const nextBtn = carousel.querySelector('.carousel-next');
+                
+                let currentSlide = 0;
+                let autoPlayInterval;
+
+                function showSlide(index) {
+                    // Normalize index
+                    if (index >= slides.length) {
+                        index = 0;
+                    } else if (index < 0) {
+                        index = slides.length - 1;
+                    }
+
+                    // Hide all slides
+                    slides.forEach((slide, i) => {
+                        slide.classList.remove('active', 'carousel-item-fade');
+                        if (i === currentSlide) {
+                             // Add fade-out effect to the current slide
+                            slide.classList.add('carousel-item-fade');
+                        }
+                    });
+
+                    // Update dots
+                    dots.forEach(dot => dot.classList.remove('bg-white'));
+                    dots.forEach(dot => dot.classList.add('bg-white/50'));
+                    
+                    // Show new slide
+                    currentSlide = index;
+                    slides[currentSlide].classList.add('active');
+                    dots[currentSlide].classList.remove('bg-white/50');
+                    dots[currentSlide].classList.add('bg-white');
+                }
+
+                function nextSlide() {
+                    showSlide(currentSlide + 1);
+                }
+
+                function prevSlide() {
+                    showSlide(currentSlide - 1);
+                }
+
+                function startAutoPlay() {
+                    stopAutoPlay(); // Clear existing interval
+                    autoPlayInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
+                }
+
+                function stopAutoPlay() {
+                    clearInterval(autoPlayInterval);
+                }
+
+                // Event Listeners
+                nextBtn.addEventListener('click', () => {
+                    nextSlide();
+                    stopAutoPlay();
+                    startAutoPlay();
+                });
+
+                prevBtn.addEventListener('click', () => {
+                    prevSlide();
+                    stopAutoPlay();
+                    startAutoPlay();
+                });
+
+                dots.forEach((dot, index) => {
+                    dot.addEventListener('click', () => {
+                        showSlide(index);
+                        stopAutoPlay();
+                        startAutoPlay();
+                    });
+                });
+
+                // Initial setup
+                showSlide(0);
+                startAutoPlay();
+            }
+
+            // --- NEW: Cookie Banner Logic ---
+            const cookieBanner = document.getElementById('cookie-banner');
+            const revisitBtn = document.getElementById('cookie-revisit-btn');
+            const acceptBtn = document.getElementById('cookie-accept');
+            const rejectBtn = document.getElementById('cookie-reject');
+            const consentKey = 'clinica_padrao_consent';
+
+            function showBanner() {
+                cookieBanner.classList.add('show');
+                revisitBtn.classList.remove('show');
+            }
+
+            function hideBanner() {
+                cookieBanner.classList.remove('show');
+                revisitBtn.classList.add('show');
+            }
+
+            function setConsent(value) {
+                localStorage.setItem(consentKey, value);
+                hideBanner();
+            }
+
+            acceptBtn.addEventListener('click', () => setConsent('accepted'));
+            rejectBtn.addEventListener('click', () => setConsent('rejected'));
+            revisitBtn.addEventListener('click', () => {
+                // Clear consent to show banner again
+                localStorage.removeItem(consentKey);
+                showBanner();
+            });
+
+            // Check consent on page load
+            const currentConsent = localStorage.getItem(consentKey);
+            if (!currentConsent) {
+                // Delay banner show slightly to avoid layout shift
+                setTimeout(showBanner, 500);
+            } else {
+                hideBanner();
+            }
+
+        });
+    </script>
+
+</body>
+</html>
