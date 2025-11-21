@@ -22,8 +22,8 @@ const CLINIC_EMAIL = 'clinicadentariadopadrao@hotmail.com'; // O endereço de de
 // A configuração é carregada durante o runtime.
 const transporter = nodemailer.createTransport({
     host: 'smtp.office365.com',
-    port: 587,
-    secure: false, 
+    port: 465,
+    secure: true, 
     auth: {
         // Acessa os valores definidos nos parâmetros
         user: SENDER_EMAIL.value(), 
