@@ -49,9 +49,9 @@
 
         /* NEW: Cookie Banner Styles */
         .cookie-banner {
-            background-color: #f7f7f7;
+            background-color: '#f7f7f7';
             border-top: 1px solid #ddd;
-            color: #0b2540;
+            color: '#0b2540';
             transition: transform 0.3s ease-in-out;
             transform: translateY(100%);
         }
@@ -59,7 +59,7 @@
             transform: translateY(0);
         }
         .cookie-revisit {
-            background-color: #0b2540;
+            background-color: '#0b2540';
             transition: transform 0.3s ease-in-out, opacity 0.3s;
             transform: translateY(100%);
             opacity: 0;
@@ -143,7 +143,7 @@
             <h2 class="text-3xl md:text-4xl font-serif font-bold text-padrao-gold mb-4" id="section-title">Marque a Sua Consulta</h2>
             <p class="text-white/90 mb-8 max-w-2xl mx-auto" id="section-subtitle">Selecione o médico, a data e o horário desejados. O seu pedido será enviado para a clínica para confirmação.</p>
             
-            <!-- Formulário que será escondido após o envio -->
+            <!-- Formulário que será escondido após o envio. ACTION FOI REMOVIDA -->
             <form id="appointment-form" action="#" method="POST" class="bg-white p-6 md:p-8 rounded-lg shadow-2xl text-left">
                 <div class="grid md:grid-cols-2 gap-6">
                     
@@ -240,6 +240,7 @@
                         </li>
                            <li class="flex gap-2 items-center">
                             <i class="fas fa-envelope text-padrao-gold"></i>
+                            <!-- Este é um link de contacto normal, não é o formulário de submissão -->
                             <a href="mailto:clinicadentariadopadrao@hotmail.com" class="hover:text-padrao-gold transition-colors text-xs">clinicadentariadopadrao@hotmail.com</a>
                         </li>
                         <li class="flex gap-4 mt-4">
