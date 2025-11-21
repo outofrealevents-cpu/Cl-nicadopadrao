@@ -70,6 +70,10 @@
             opacity: 1;
             pointer-events: auto;
         }
+        /* Estilos adicionais para a mensagem de confirmação */
+        .conf-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f0f0f0' fill-opacity='0.4'%3E%3Cpath d='M30 60h30v-30H30zm15-15h15v-15H45zM30 30h15V0H30zM0 30h30V0H0zm0 45h30V45H0zM45 45h15V30H45z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
     </style>
 </head>
 <body class="bg-white text-gray-800">
@@ -136,10 +140,11 @@
 
     <section id="agendamento" class="py-16 md:py-24 bg-padrao-blue">
         <div class="container mx-auto px-4 max-w-3xl text-center">
-            <h2 class="text-3xl md:text-4xl font-serif font-bold text-padrao-gold mb-4">Marque a Sua Consulta</h2>
-            <p class="text-white/90 mb-8 max-w-2xl mx-auto">Selecione o médico, a data e o horário desejados. O seu pedido será enviado para a clínica para confirmação.</p>
+            <h2 class="text-3xl md:text-4xl font-serif font-bold text-padrao-gold mb-4" id="section-title">Marque a Sua Consulta</h2>
+            <p class="text-white/90 mb-8 max-w-2xl mx-auto" id="section-subtitle">Selecione o médico, a data e o horário desejados. O seu pedido será enviado para a clínica para confirmação.</p>
             
-            <form action="mailto:clinicadentariadopadrao@hotmail.com" method="POST" enctype="text/plain" class="bg-white p-6 md:p-8 rounded-lg shadow-2xl text-left">
+            <!-- Formulário que será escondido após o envio -->
+            <form id="appointment-form" action="#" method="POST" class="bg-white p-6 md:p-8 rounded-lg shadow-2xl text-left">
                 <div class="grid md:grid-cols-2 gap-6">
                     
                     <div class="md:col-span-2">
@@ -183,6 +188,23 @@
                     
                 </div>
             </form>
+            
+            <!-- NOVO BLOCO: Mensagem de Confirmação (Inicialmente escondida) -->
+            <div id="confirmation-message" class="hidden bg-white p-12 md:p-16 rounded-xl shadow-2xl text-center conf-pattern">
+                <div class="inline-block p-4 rounded-full bg-padrao-gold/20 mb-6">
+                    <i class="fas fa-check-circle text-padrao-gold text-5xl"></i>
+                </div>
+                <h3 class="text-4xl md:text-5xl font-serif font-bold text-padrao-blue mb-2">
+                    Obrigado pelo seu <span class="text-padrao-gold">interesse</span>
+                </h3>
+                <p class="text-xl text-gray-600 max-w-md mx-auto">
+                    A sua solicitação foi enviada com sucesso. Entraremos em contacto o mais rapidamente possível para confirmar a data e hora da consulta.
+                </p>
+                <a href="index.html" class="mt-8 inline-block bg-padrao-blue text-white font-bold text-lg py-3 px-8 rounded-lg hover:bg-padrao-gold hover:text-padrao-blue transition-all shadow-md">
+                    Voltar à Página Inicial
+                </a>
+            </div>
+            
         </div>
     </section>
 
@@ -212,11 +234,11 @@
                             <i class="fas fa-map-marker-alt text-padrao-gold mt-1"></i>
                             <span class="text-gray-400">Rua do Padrão nº58, 2º sala 22, 4415-284 Pedroso</span>
                         </li>
-                         <li class="flex gap-2 items-center">
+                           <li class="flex gap-2 items-center">
                             <i class="fas fa-phone text-padrao-gold"></i>
                             <a href="tel:91813007" class="hover:text-padrao-gold transition-colors">918 130 007</a>
                         </li>
-                         <li class="flex gap-2 items-center">
+                           <li class="flex gap-2 items-center">
                             <i class="fas fa-envelope text-padrao-gold"></i>
                             <a href="mailto:clinicadentariadopadrao@hotmail.com" class="hover:text-padrao-gold transition-colors text-xs">clinicadentariadopadrao@hotmail.com</a>
                         </li>
@@ -254,8 +276,46 @@
         </div>
     </div>
 
+    <!-- INÍCIO DO NOVO BLOCO FIREBASE -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+
     <script>
+      // CONFIGURAÇÃO DO FIREBASE (COPIADA DO SEU CONSOLE)
+      const firebaseConfig = {
+        apiKey: "AIzaSyCptdJ3SYjhHA3PRuQm_ghynNQtMC-vp-Y",
+        authDomain: "clinica-do-padrao.firebaseapp.com",
+        projectId: "clinica-do-padrao",
+        storageBucket: "clinica-do-padrao.firebasestorage.app",
+        messagingSenderId: "533898136014",
+        appId: "1:533898136014:web:d4651bffc1f6378766c39f",
+        measurementId: "G-DFJ9BH7C52"
+      };
+
+      // Inicializa o Firebase e o serviço Firestore
+      const app = firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+    </script>
+    <!-- FIM DO NOVO BLOCO FIREBASE -->
+
+    <script>
+        // ADICIONADA A LÓGICA DE SUBMISSÃO DO FIREBASE À FUNÇÃO PRINCIPAL
         document.addEventListener('DOMContentLoaded', function() {
+            
+            // Variáveis para a nova mensagem de confirmação
+            const form = document.getElementById('appointment-form');
+            const confirmationMessage = document.getElementById('confirmation-message');
+            const sectionTitle = document.getElementById('section-title');
+            const sectionSubtitle = document.getElementById('section-subtitle');
+
+            // Função para mostrar a mensagem de sucesso
+            function showSuccessMessage() {
+                if (form) form.classList.add('hidden');
+                if (confirmationMessage) confirmationMessage.classList.remove('hidden');
+                if (sectionTitle) sectionTitle.textContent = "Solicitação Enviada!";
+                if (sectionSubtitle) sectionSubtitle.textContent = "Agradecemos o seu interesse na Clínica do Padrão.";
+            }
+
             
             // --- Mobile Menu ---
             const menuBtn = document.getElementById('mobile-menu-btn');
@@ -277,7 +337,48 @@
             closeMenuBtn.addEventListener('click', closeMenu);
             mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
 
-            
+
+            // --- Lógica de Envio do Formulário Firebase (ATUALIZADA) ---
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault(); // Impedir o envio padrão do formulário
+                    
+                    // 1. Recolher Dados do Formulário
+                    const nome = document.getElementById('nome').value;
+                    const email = document.getElementById('email').value;
+                    const telefone = document.getElementById('telefone').value;
+                    const medico = document.getElementById('medico').value;
+                    const data = document.getElementById('data').value;
+                    const hora = document.getElementById('hora').value;
+
+                    // 2. Criar Objeto de Dados
+                    const appointmentData = {
+                        nome: nome,
+                        email: email,
+                        telefone: telefone,
+                        medico: medico,
+                        dataDesejada: data,
+                        horaDesejada: hora,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                        status: 'Pendente' 
+                    };
+
+                    // 3. Enviar para a coleção "agendamentos" no Firestore
+                    db.collection("agendamentos").add(appointmentData)
+                        .then(() => {
+                            // Em caso de sucesso: mostrar a mensagem bonita
+                            form.reset(); 
+                            showSuccessMessage();
+                        })
+                        .catch((error) => {
+                            console.error("Erro ao enviar pedido: ", error);
+                            // Se houver erro, mostrar um alerta de erro
+                            alert("❌ Ocorreu um erro ao enviar o pedido. Por favor, tente novamente.");
+                        });
+                });
+            }
+
+
             // --- Cookie Banner Logic ---
             const cookieBanner = document.getElementById('cookie-banner');
             const revisitBtn = document.getElementById('cookie-revisit-btn');
