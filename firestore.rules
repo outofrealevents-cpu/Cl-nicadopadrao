@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Regra específica para a coleção 'agendamentos'
+    match /agendamentos/{agendamentoId} {
+      // Permite que qualquer cliente crie um novo registo (o formulário do site)
+      allow create: if true;
+      // Nega leitura, edição e exclusão de todos os registos
+      allow read, update, delete: if false; 
+    }
+
+    // Regra padrão: nega acesso a todas as outras coleções
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

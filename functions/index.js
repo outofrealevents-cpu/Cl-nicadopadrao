@@ -1,15 +1,25 @@
 /**
  * CLOUD FUNCTION PARA NOTIFICAÇÃO DE EMAIL
- * Usa Nodemailer para enviar o email através do SMTP do Outlook/Hotmail.
+ * Esta função é acionada sempre que um novo agendamento é criado na coleção 'agendamentos'
+ * no Cloud Firestore.
+ * * * CONFIGURAÇÃO CRUCIAL (Executar no terminal ANTES do deploy):
+ * firebase functions:config:set gmail.email="clinicadentariadopadrao@hotmail.com" gmail.password="3GSQK-EW97E-3CC3U-4LRJM-GH72S"
+ * * * A Palavra-Passe deve ser a Palavra-Passe de Aplicação de 16 caracteres.
+ * * * Instalar a dependência: npm install nodemailer
  */
 
+// Importa as bibliotecas necessárias
 const functions = require('firebase-functions');
 const nodemailer = require('nodemailer');
+const { setGlobalOptions } = require('firebase-functions/v2'); // Adicionei a v2 para opções globais
+
+// Define opções globais (para controlo de custos)
+setGlobalOptions({ maxInstances: 5 }); 
 
 // --- Configuração das Variáveis Secretas ---
-const SENDER_EMAIL = functions.config().gmail.email;     // Usamos o mesmo nome da variável secreta, mas agora armazena o email do Outlook/Hotmail
-const APP_PASSWORD = functions.config().gmail.password;   // Armazena a Palavra-Passe de Aplicação do Outlook/Hotmail
-const CLINIC_EMAIL = 'clinicadentariadopadrao@hotmail.com'; // O endereço final que recebe a notificação (que é o mesmo que SENDER_EMAIL neste caso)
+const SENDER_EMAIL = functions.config().gmail.email;     
+const APP_PASSWORD = functions.config().gmail.password;   
+const CLINIC_EMAIL = 'clinicadentariadopadrao@hotmail.com';
 
 // Configuração do transportador Nodemailer para o Outlook/Hotmail
 const transporter = nodemailer.createTransport({
@@ -18,14 +28,16 @@ const transporter = nodemailer.createTransport({
     secure: false, // Usar TLS em vez de SSL (porta 587)
     auth: {
         user: SENDER_EMAIL,
-        pass: APP_PASSWORD, // Palavra-Passe de Aplicação do Outlook/Hotmail
+        pass: APP_PASSWORD, // Palavra-Passe de Aplicação
     },
     tls: {
-        ciphers:'SSLv3' // Correção de segurança para alguns servidores SMTP
+        ciphers:'SSLv3' 
     }
 });
 
-// 1. A função é acionada na criação de um documento na coleção 'agendamentos'
+// =============================================================================
+// FUNÇÃO DE NOTIFICAÇÃO PRINCIPAL: Acionada por nova criação no Firestore
+// =============================================================================
 exports.sendAppointmentNotification = functions.firestore
     .document('agendamentos/{agendamentoId}')
     .onCreate((snap, context) => {
