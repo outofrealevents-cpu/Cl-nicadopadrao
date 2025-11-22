@@ -1,69 +1,43 @@
 /**
- * CLOUD FUNCTION PARA NOTIFICAÇÃO DE EMAIL (V2 -- COM SECRETS)
+ * CLOUD FUNCTION - ENVIO VIA GMAIL (Recebe no Hotmail)
  */
-
 const { onDocumentCreated } = require('firebase-functions/v2/firestore');
-// IMPORTANTE: Adicionamos 'defineSecret' aqui
 const { defineString, defineSecret } = require('firebase-functions/params');
 const nodemailer = require('nodemailer');
 
-// -----------------------------------------------------------------------------
-// 1. Definição das Variáveis
-// -----------------------------------------------------------------------------
-// O Email pode ser visível (defineString)
-const senderEmailParam = defineString('GMAIL_EMAIL');
+// 1. VARIÁVEIS
+const senderEmailParam = defineString('GMAIL_EMAIL');     // O teu Gmail (Carteiro)
+const appPasswordSecret = defineSecret('GMAIL_PASSWORD'); // A Senha do Gmail
+const CLINIC_EMAIL = 'clinicadentariadopadrao@hotmail.com'; // O teu Hotmail (Onde recebes)
 
-// A Password TEM de ser secreta (defineSecret)
-const appPasswordSecret = defineSecret('GMAIL_PASSWORD');
-
-const CLINIC_EMAIL = 'clinicadentariadopadrao@hotmail.com';
-
-// -----------------------------------------------------------------------------
-// 2. Configuração do Transporter
-// -----------------------------------------------------------------------------
+// 2. CONFIGURAÇÃO (Carteiro GMAIL)
 const createTransporter = () => {
     return nodemailer.createTransport({
-        host: 'smtp.office365.com',
-        port: 587,
-        secure: false,
+        service: 'gmail', // <--- MUDOU PARA GMAIL
         auth: {
-            user: senderEmailParam.value(), // Lê a string de configuração
-            pass: appPasswordSecret.value(), // <--- Lê do cofre de segredos!
+            user: senderEmailParam.value(),
+            pass: appPasswordSecret.value(),
         },
-        tls: {
-            rejectUnauthorized: true
-        },
-        family: 4, // Força IPv4 (Anti-Timeout)
-        connectionTimeout: 10000,
-        greetingTimeout: 5000,
-        socketTimeout: 15000,
-        logger: true,
-        debug: true
+        family: 4,
     });
 };
 
-// =============================================================================
-// FUNÇÃO PRINCIPAL
-// =============================================================================
+// 3. FUNÇÃO PRINCIPAL
 exports.sendAppointmentNotification = onDocumentCreated({
     document: 'agendamentos/{agendamentoId}',
     region: 'europe-west1',
     maxInstances: 5,
-    memory: '256MiB',
-    // AQUI ESTÁ O SEGREDOS: Dar permissão à função para ler a password
-    secrets: [appPasswordSecret] 
+    secrets: [appPasswordSecret]
 }, async (event) => {
     
     const appointment = event.data?.data();
-    if (!appointment) {
-        console.log("No data found.");
-        return null;
-    }
+    if (!appointment) return null;
 
     // Corpo do email
     const emailBody = `
         <div style="font-family: Arial, sans-serif; padding: 20px;">
-            <h1 style="color: #0b2540;">Novo Pedido de Marcação</h1>
+            <h2 style="color: #0b2540;">Novo Pedido de Marcação</h2>
+            <hr>
             <p><strong>Paciente:</strong> ${appointment.nome}</p>
             <p><strong>Email:</strong> ${appointment.email}</p>
             <p><strong>Telefone:</strong> ${appointment.telefone}</p>
@@ -73,9 +47,9 @@ exports.sendAppointmentNotification = onDocumentCreated({
     `;
 
     const mailOptions = {
-        to: CLINIC_EMAIL,
-        from: senderEmailParam.value(),
-        subject: `Novo Pedido: ${appointment.nome}`,
+        to: CLINIC_EMAIL, // <--- Vai para o teu Hotmail
+        from: `Notificações Clínica <${senderEmailParam.value()}>`, // Vem do Gmail
+        subject: `Nova Marcação: ${appointment.nome}`,
         html: emailBody,
     };
 
@@ -84,7 +58,7 @@ exports.sendAppointmentNotification = onDocumentCreated({
         await transporter.sendMail(mailOptions);
         console.log('Email enviado com sucesso!');
     } catch (error) {
-        console.error('Erro ao enviar email:', error);
+        console.error('ERRO:', error);
     }
     return null;
 });
