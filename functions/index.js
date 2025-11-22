@@ -1,5 +1,5 @@
 /**
- * CLOUD FUNCTION PARA NOTIFICAÇÃO DE EMAIL (V2 - COM SECRETS)
+ * CLOUD FUNCTION PARA NOTIFICAÇÃO DE EMAIL (V2 -- COM SECRETS)
  */
 
 const { onDocumentCreated } = require('firebase-functions/v2/firestore');
