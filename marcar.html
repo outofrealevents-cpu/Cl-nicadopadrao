@@ -47,11 +47,11 @@
             font-family: 'Playfair Display', serif;
         }
 
-        /* NEW: Cookie Banner Styles */
+        /* Cookie Banner Styles */
         .cookie-banner {
-            background-color: '#f7f7f7';
+            background-color: #f7f7f7;
             border-top: 1px solid #ddd;
-            color: '#0b2540';
+            color: #0b2540;
             transition: transform 0.3s ease-in-out;
             transform: translateY(100%);
         }
@@ -59,7 +59,7 @@
             transform: translateY(0);
         }
         .cookie-revisit {
-            background-color: '#0b2540';
+            background-color: #0b2540;
             transition: transform 0.3s ease-in-out, opacity 0.3s;
             transform: translateY(100%);
             opacity: 0;
@@ -97,8 +97,7 @@
                         <li><a href="servicos.html" class="font-medium hover:text-padrao-gold transition-colors">Serviços</a></li>
                         <li><a href="opinioes.html" class="font-medium hover:text-padrao-gold transition-colors">Opiniões</a></li>
                         <li><a href="localizacao.html" class="font-medium hover:text-padrao-gold transition-colors">Localização</a></li>
-                        <li><a href="marcar.html" class="font-medium hover:text-padrao-gold transition-colors">Marcar</a></li>
-                    </ul>
+                        </ul>
                     <div class="flex items-center gap-4 pl-4 border-l border-gray-200">
                         <a href="https://www.instagram.com/clinicadentariadopadrao/" target="_blank" class="text-xl hover:text-padrao-gold transition-colors">
                             <i class="fab fa-instagram"></i>
@@ -140,33 +139,12 @@
 
     <section id="agendamento" class="py-16 md:py-24 bg-padrao-blue">
         <div class="container mx-auto px-4 max-w-3xl text-center">
-            <h2 class="text-3xl md:text-4xl font-serif font-bold text-padrao-gold mb-4" id="section-title">Marque a Sua Consulta</h2>
-            <p class="text-white/90 mb-8 max-w-2xl mx-auto" id="section-subtitle">Selecione o médico, a data e o horário desejados. O seu pedido será enviado para a clínica para confirmação.</p>
+            <h2 class="text-3xl md:text-4xl font-serif font-bold text-padrao-gold mb-4" id="section-title">Formulário de Contacto</h2>
+            <p class="text-white/90 mb-8 max-w-2xl mx-auto" id="section-subtitle">Preencha os seus dados. Entraremos em contacto brevemente para agendar a sua consulta.</p>
             
-            <!-- Formulário que será escondido após o envio. ACTION FOI REMOVIDA -->
             <form id="appointment-form" action="#" method="POST" class="bg-white p-6 md:p-8 rounded-lg shadow-2xl text-left">
                 <div class="grid md:grid-cols-2 gap-6">
                     
-                    <div class="md:col-span-2">
-                        <label for="medico" class="block text-sm font-medium text-gray-700 mb-1">Escolha o Médico:</label>
-                        <select id="medico" name="medico" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-padrao-gold focus:border-padrao-gold">
-                            <option value="">-- Selecione um Especialista --</option>
-                            <option value="veronica_castro">Dra. Verónica Castro</option>
-                            <option value="leonardo_serra">Dr. Leonardo Serra</option>
-                            <option value="filipa_teles">Dra. Filipa Teles</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label for="data" class="block text-sm font-medium text-gray-700 mb-1">Data Desejada:</label>
-                        <input type="date" id="data" name="data" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-padrao-gold focus:border-padrao-gold">
-                    </div>
-                    
-                    <div>
-                        <label for="hora" class="block text-sm font-medium text-gray-700 mb-1">Hora Desejada:</label>
-                        <input type="time" id="hora" name="hora" min="09:00" max="18:00" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-padrao-gold focus:border-padrao-gold">
-                    </div>
-
                     <div class="md:col-span-2">
                         <label for="nome" class="block text-sm font-medium text-gray-700 mb-1">Nome Completo:</label>
                         <input type="text" id="nome" name="nome" placeholder="O seu nome" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-padrao-gold focus:border-padrao-gold">
@@ -174,31 +152,35 @@
                     
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700 mb-1">E-mail:</label>
-                        <input type="email" id="email" name="email" placeholder="o_seu_email@exemplo.com" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-padrao-gold focus:border-padrao-gold">
+                        <input type="email" id="email" name="email" placeholder="email@exemplo.com" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-padrao-gold focus:border-padrao-gold">
                     </div>
                     
                     <div>
                         <label for="telefone" class="block text-sm font-medium text-gray-700 mb-1">Telefone:</label>
                         <input type="tel" id="telefone" name="telefone" placeholder="(+351) XXXXXXXXX" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-padrao-gold focus:border-padrao-gold">
                     </div>
+
+                    <div class="md:col-span-2">
+                        <label for="data" class="block text-sm font-medium text-gray-700 mb-1">Data Preferencial (Opcional):</label>
+                        <input type="date" id="data" name="data" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-padrao-gold focus:border-padrao-gold text-gray-600">
+                    </div>
                     
                     <button type="submit" class="md:col-span-2 w-full bg-padrao-gold text-padrao-blue font-bold text-lg py-3 rounded-lg hover:bg-opacity-90 transition-all shadow-md hover:shadow-lg">
-                        Enviar Pedido de Marcação
+                        Enviar Pedido
                     </button>
                     
                 </div>
             </form>
             
-            <!-- NOVO BLOCO: Mensagem de Confirmação (Inicialmente escondida) -->
             <div id="confirmation-message" class="hidden bg-white p-12 md:p-16 rounded-xl shadow-2xl text-center conf-pattern">
                 <div class="inline-block p-4 rounded-full bg-padrao-gold/20 mb-6">
                     <i class="fas fa-check-circle text-padrao-gold text-5xl"></i>
                 </div>
                 <h3 class="text-4xl md:text-5xl font-serif font-bold text-padrao-blue mb-2">
-                    Obrigado pelo seu <span class="text-padrao-gold">interesse</span>
+                    Obrigado pelo seu <span class="text-padrao-gold">contacto</span>
                 </h3>
                 <p class="text-xl text-gray-600 max-w-md mx-auto">
-                    A sua solicitação foi enviada com sucesso. Entraremos em contacto o mais rapidamente possível para confirmar a data e hora da consulta.
+                    Os seus dados foram enviados com sucesso. Entraremos em contacto o mais rapidamente possível.
                 </p>
                 <a href="index.html" class="mt-8 inline-block bg-padrao-blue text-white font-bold text-lg py-3 px-8 rounded-lg hover:bg-padrao-gold hover:text-padrao-blue transition-all shadow-md">
                     Voltar à Página Inicial
@@ -213,7 +195,7 @@
             <div class="grid md:grid-cols-4 gap-12">
                 
                 <div class="md:col-span-2">
-                    <img src="public/logofinalrony.png" alt="Logo Clínica do Padrão" class="h-32 mb-6 bg-white/10 rounded-md p-4">
+                    <img src="public/logofinalrony.png" alt="Logo Clínica do Padrão" class="h-16 mb-4 bg-white/10 rounded-md p-2">
                     <p class="text-sm text-gray-400 max-w-md">A clinica do Padrão surgiu em 2024, garantindo padrões de altíssima qualidade e eficiência.</p>
                 </div>
                 
@@ -234,13 +216,12 @@
                             <i class="fas fa-map-marker-alt text-padrao-gold mt-1"></i>
                             <span class="text-gray-400">Rua do Padrão nº58, 2º sala 22, 4415-284 Pedroso</span>
                         </li>
-                           <li class="flex gap-2 items-center">
+                         <li class="flex gap-2 items-center">
                             <i class="fas fa-phone text-padrao-gold"></i>
                             <a href="tel:91813007" class="hover:text-padrao-gold transition-colors">918 130 007</a>
                         </li>
-                           <li class="flex gap-2 items-center">
+                         <li class="flex gap-2 items-center">
                             <i class="fas fa-envelope text-padrao-gold"></i>
-                            <!-- Este é um link de contacto normal, não é o formulário de submissão -->
                             <a href="mailto:clinicadentariadopadrao@hotmail.com" class="hover:text-padrao-gold transition-colors text-xs">clinicadentariadopadrao@hotmail.com</a>
                         </li>
                         <li class="flex gap-4 mt-4">
@@ -277,12 +258,11 @@
         </div>
     </div>
 
-    <!-- INÍCIO DO NOVO BLOCO FIREBASE -->
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
 
     <script>
-      // CONFIGURAÇÃO DO FIREBASE (COPIADA DO SEU CONSOLE)
+      // CONFIGURAÇÃO DO FIREBASE
       const firebaseConfig = {
         apiKey: "AIzaSyCptdJ3SYjhHA3PRuQm_ghynNQtMC-vp-Y",
         authDomain: "clinica-do-padrao.firebaseapp.com",
@@ -293,29 +273,21 @@
         measurementId: "G-DFJ9BH7C52"
       };
 
-      // Inicializa o Firebase e o serviço Firestore
       const app = firebase.initializeApp(firebaseConfig);
       const db = firebase.firestore();
     </script>
-    <!-- FIM DO NOVO BLOCO FIREBASE -->
 
     <script>
-        // ADICIONADA A LÓGICA DE SUBMISSÃO DO FIREBASE À FUNÇÃO PRINCIPAL
         document.addEventListener('DOMContentLoaded', function() {
             
-            // Variáveis para a nova mensagem de confirmação
             const form = document.getElementById('appointment-form');
             const confirmationMessage = document.getElementById('confirmation-message');
-            const sectionTitle = document.getElementById('section-title');
-            const sectionSubtitle = document.getElementById('section-subtitle');
 
-            // Função para mostrar a mensagem de sucesso
             function showSuccessMessage() {
                 if (form) form.classList.add('hidden');
                 if (confirmationMessage) confirmationMessage.classList.remove('hidden');
             }
 
-            
             // --- Mobile Menu ---
             const menuBtn = document.getElementById('mobile-menu-btn');
             const closeMenuBtn = document.getElementById('mobile-menu-close-btn');
@@ -337,27 +309,23 @@
             mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
 
 
-            // --- Lógica de Envio do Formulário Firebase (ATUALIZADA) ---
+            // --- Lógica de Envio do Formulário (ATUALIZADA) ---
             if (form) {
                 form.addEventListener('submit', function(e) {
-                    e.preventDefault(); // Impedir o envio padrão do formulário
+                    e.preventDefault(); 
                     
-                    // 1. Recolher Dados do Formulário
+                    // 1. Recolher Dados (Sem mensagem, com data opcional)
                     const nome = document.getElementById('nome').value;
                     const email = document.getElementById('email').value;
                     const telefone = document.getElementById('telefone').value;
-                    const medico = document.getElementById('medico').value;
-                    const data = document.getElementById('data').value;
-                    const hora = document.getElementById('hora').value;
+                    const data = document.getElementById('data').value; // Opcional
 
                     // 2. Criar Objeto de Dados
                     const appointmentData = {
                         nome: nome,
                         email: email,
                         telefone: telefone,
-                        medico: medico,
-                        dataDesejada: data,
-                        horaDesejada: hora,
+                        dataPreferencial: data, // Envia a data (pode ir vazia)
                         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                         status: 'Pendente' 
                     };
@@ -365,13 +333,11 @@
                     // 3. Enviar para a coleção "agendamentos" no Firestore
                     db.collection("agendamentos").add(appointmentData)
                         .then(() => {
-                            // Em caso de sucesso: mostrar a mensagem bonita
                             form.reset(); 
                             showSuccessMessage();
                         })
                         .catch((error) => {
                             console.error("Erro ao enviar pedido: ", error);
-                            // Se houver erro, mostrar um alerta de erro
                             alert("❌ Ocorreu um erro ao enviar o pedido. Por favor, tente novamente.");
                         });
                 });
@@ -403,15 +369,12 @@
             acceptBtn.addEventListener('click', () => setConsent('accepted'));
             rejectBtn.addEventListener('click', () => setConsent('rejected'));
             revisitBtn.addEventListener('click', () => {
-                // Clear consent to show banner again
                 localStorage.removeItem(consentKey);
                 showBanner();
             });
 
-            // Check consent on page load
             const currentConsent = localStorage.getItem(consentKey);
             if (!currentConsent) {
-                // Delay banner show slightly to avoid layout shift
                 setTimeout(showBanner, 500);
             } else {
                 hideBanner();
