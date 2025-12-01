@@ -33,6 +33,23 @@
         }
     </script>
 
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      
+      fbq('init', '1651512129565359'); 
+      fbq('track', 'PageView');
+    </script>
+    <noscript>
+      <img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1651512129565359&ev=PageView&noscript=1"/>
+    </noscript>
     <style>
         /* Base Styles */
         html {
@@ -301,7 +318,6 @@
                 if (modal) {
                     modal.classList.remove('hidden');
                     modal.classList.add('flex');
-                    // Trigger reflow to enable transition
                     void modal.offsetWidth;
                     modal.classList.add('open');
                     document.body.style.overflow = 'hidden';
@@ -315,7 +331,6 @@
                     setTimeout(() => {
                         modal.classList.add('hidden');
                         modal.classList.remove('flex');
-                        // Check if any other modal is open before re-enabling scroll
                         const anyModalOpen = document.querySelector('.modal.open');
                         if (!anyModalOpen) {
                             document.body.style.overflow = 'auto';
@@ -349,27 +364,22 @@
                 let autoPlayInterval;
 
                 function showSlide(index) {
-                    // Normalize index
                     if (index >= slides.length) {
                         index = 0;
                     } else if (index < 0) {
                         index = slides.length - 1;
                     }
 
-                    // Hide all slides
                     slides.forEach((slide, i) => {
                         slide.classList.remove('active', 'carousel-item-fade');
                         if (i === currentSlide) {
-                             // Add fade-out effect to the current slide
-                            slide.classList.add('carousel-item-fade');
+                             slide.classList.add('carousel-item-fade');
                         }
                     });
 
-                    // Update dots
                     dots.forEach(dot => dot.classList.remove('bg-white'));
                     dots.forEach(dot => dot.classList.add('bg-white/50'));
                     
-                    // Show new slide
                     currentSlide = index;
                     slides[currentSlide].classList.add('active');
                     dots[currentSlide].classList.remove('bg-white/50');
@@ -393,7 +403,6 @@
                     clearInterval(autoPlayInterval);
                 }
 
-                // Event Listeners
                 nextBtn.addEventListener('click', () => {
                     nextSlide();
                     stopAutoPlay();
@@ -414,7 +423,6 @@
                     });
                 });
 
-                // Initial setup
                 showSlide(0);
                 startAutoPlay();
             }
@@ -444,7 +452,6 @@
             acceptBtn.addEventListener('click', () => setConsent('accepted'));
             rejectBtn.addEventListener('click', () => setConsent('rejected'));
             revisitBtn.addEventListener('click', () => {
-                // Clear consent to show banner again
                 localStorage.removeItem(consentKey);
                 showBanner();
             });
@@ -452,7 +459,6 @@
             // Check consent on page load
             const currentConsent = localStorage.getItem(consentKey);
             if (!currentConsent) {
-                // Delay banner show slightly to avoid layout shift
                 setTimeout(showBanner, 500);
             } else {
                 hideBanner();
