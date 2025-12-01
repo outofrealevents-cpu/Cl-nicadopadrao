@@ -33,6 +33,23 @@
         }
     </script>
 
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      
+      fbq('init', '1651512129565359'); 
+      fbq('track', 'PageView');
+    </script>
+    <noscript>
+      <img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1651512129565359&ev=PageView&noscript=1"/>
+    </noscript>
     <style>
         /* Base Styles */
         html {
@@ -335,6 +352,13 @@
                         .then(() => {
                             form.reset(); 
                             showSuccessMessage();
+                            
+                            // --- 2. AQUI ESTÁ A "MÁGICA" DO LEAD ---
+                            // O pixel dispara SOMENTE quando o Firebase confirma que guardou os dados
+                            if(typeof fbq !== 'undefined') {
+                                fbq('track', 'Lead');
+                                console.log('Facebook Pixel: Lead disparado com sucesso!');
+                            }
                         })
                         .catch((error) => {
                             console.error("Erro ao enviar pedido: ", error);
